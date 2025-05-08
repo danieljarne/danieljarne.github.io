@@ -93,19 +93,17 @@
     /* ===== Outdoor Gallery ===== */
     .outdoor-grid {
       display: grid;
-      /* smaller tiles & extra space between */
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: calc(var(--spacing) * 1.5);
-      place-items: center;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--spacing);
     }
 
     .outdoor-grid img {
       width: 100%;
       height: auto;
-      max-height: 140px; /* keep images visually smaller */
       border-radius: 0.5rem;
       object-fit: cover;
     }
+
 
     footer {
       text-align: center;
