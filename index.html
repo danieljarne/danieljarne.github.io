@@ -4,227 +4,768 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Daniel Jarne Ornia</title>
+  <meta name="description" content="Daniel Jarne Ornia — researcher in AI safety, decision making and multi-agent AI systems at the University of Oxford." />
 
-  <!-- Favicon & Fonts -->
   <link rel="icon" href="favicon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" defer></script>
-  <script defer>
-    WebFont.load({
-      google: { families: ["Raleway:100,200,300,400,500,600,700,800,900"] }
-    });
-  </script>
 
-  <!-- Base stylesheet (keeps your original colour palette) -->
-  <link href="web.css" rel="stylesheet">
-
-  <!-- Minimal structural tweaks -->
   <style>
+    /* ===== Fonts (served locally — no external requests) ===== */
+    @font-face {
+      font-family: "Raleway";
+      src: url("Raleway-VariableFont_wght.ttf") format("truetype-variations"),
+           url("Raleway-VariableFont_wght.ttf") format("truetype");
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
+    /* ===== Palette ===== */
     :root {
-      --spacing: clamp(1rem, 2vw, 2rem);
+      --bg:        #ffffff;
+      --fg:        #1a1b1f;
+      --muted:     #6b7280;
+      --rule:      #e5e7eb;
+      --accent:    #0f5c8c;
+      --surface:   #fafafa;
+      --measure:   68ch;
+      --space:     clamp(1rem, 2.5vw, 2rem);
+      --radius:    .5rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:      #121316;
+        --fg:      #e8e8ea;
+        --muted:   #9aa0a6;
+        --rule:    #2a2c31;
+        --accent:  #7fc0e8;
+        --surface: #191b1f;
+      }
+    }
+
+    /* ===== Base ===== */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
       scroll-behavior: smooth;
+      scroll-padding-top: 4.5rem;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
-      font-family: "Raleway", sans-serif;
-      line-height: 1.6;
       margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: clamp(1rem, .96rem + .2vw, 1.075rem);
+      font-weight: 350;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
     }
 
     .wrapper {
-      max-width: 1000px;
+      max-width: 860px;
       margin-inline: auto;
-      padding: var(--spacing);
+      padding-inline: var(--space);
     }
 
-    /* ==== Layout ====*/
-    header.wrapper {
+    p { max-width: var(--measure); }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      transition: color .15s ease, border-color .15s ease;
+    }
+    a:hover, a:focus-visible { color: var(--accent); border-color: currentColor; }
+
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    h1, h2, h3 { font-weight: 600; line-height: 1.25; letter-spacing: -.01em; }
+
+    h1 { font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem); margin: 0 0 .35rem; }
+
+    h2 {
+      font-size: .8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+      margin: 0 0 1.25rem;
+    }
+
+    h3 { font-size: 1.05rem; margin: 0 0 .3rem; }
+
+    /* ===== Nav ===== */
+    nav.top {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    nav.top ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      list-style: none;
+      margin: 0;
+      padding-block: .8rem;
+      font-size: .82rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    nav.top a { border: 0; }
+
+    /* ===== Header ===== */
+    header.intro {
       display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: var(--spacing);
-      align-items: center;
+      grid-template-columns: 1fr 220px;
+      gap: calc(var(--space) * 1.5);
+      align-items: start;
+      padding-block: calc(var(--space) * 2.2) var(--space);
     }
 
-    header h1 {
-      margin-top: 0;
-      font-size: clamp(2rem, 5vw, 3rem);
+    .role {
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin: 0 0 1.25rem;
     }
+
+    .portrait { margin: 0; }
 
     .portrait img {
       width: 100%;
       height: auto;
-      border-radius: 0.75rem;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: var(--radius);
+      filter: grayscale(100%);
+      transition: filter .4s ease;
     }
+    .portrait img:hover { filter: grayscale(0%); }
 
+    /* ===== Sections ===== */
     section {
-      margin-block: calc(var(--spacing) * 2);
+      padding-block: calc(var(--space) * 1.75);
+      border-top: 1px solid var(--rule);
     }
 
-    /* Lists */
-    .news-list,
-    .contact-list {
+    /* ===== Publications ===== */
+    .pubs { list-style: none; margin: 0; padding: 0; }
+
+    .pubs > li + li {
+      margin-top: 1.6rem;
+      padding-top: 1.6rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .pub-title { max-width: var(--measure); }
+    .pub-title a { border-bottom-color: transparent; }
+    .pub-title a:hover { border-bottom-color: currentColor; }
+
+    .authors {
+      margin: 0 0 .35rem;
+      font-size: .93rem;
+      color: var(--muted);
+    }
+    .authors strong { font-weight: 600; color: var(--fg); }
+
+    .venue {
+      display: inline-block;
+      font-size: .78rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: .1rem .6rem;
+      margin-bottom: .5rem;
+    }
+
+    /* ===== Disclosure toggles ===== */
+    details > summary {
+      cursor: pointer;
       list-style: none;
-      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      font-size: .82rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      user-select: none;
+    }
+    details > summary::-webkit-details-marker { display: none; }
+    details > summary::before {
+      content: "";
+      width: .4rem; height: .4rem;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(-45deg) translate(-1px, -1px);
+      transition: transform .2s ease;
+    }
+    details[open] > summary::before { transform: rotate(45deg) translate(-1px, -1px); }
+    details > summary:hover { color: var(--accent); }
+
+    .abstract {
+      margin: .75rem 0 0;
+      padding-left: .9rem;
+      border-left: 2px solid var(--rule);
+      font-size: .94rem;
+      color: var(--muted);
+    }
+
+    /* ===== News ===== */
+    .news-list { list-style: none; margin: 0; padding: 0; }
+
+    .news-list li {
+      display: grid;
+      grid-template-columns: 8.5rem 1fr;
+      gap: .25rem 1rem;
+      max-width: var(--measure);
+    }
+    .news-list li + li { margin-top: .9rem; }
+
+    .news-list time {
+      font-size: .8rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-top: .2rem;
+    }
+
+    #older-news { margin-top: 1.5rem; }
+    #older-news .news-list { margin-top: 1.25rem; }
+
+    /* ===== Contact / footnotes ===== */
+    .contact-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem 2rem;
+      list-style: none;
       margin: 0;
+      padding: 0;
     }
 
-    .news-list li + li {
-      margin-top: .75rem;
-    }
+    .note { font-size: .9rem; color: var(--muted); }
 
-    .contact-list li + li {
-      margin-top: .5rem;
+    /* ===== Hover-peek term ("artificial swarms") ===== */
+    .peek {
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: 0;
+      border-bottom: 1px dashed var(--muted);
+      padding: 0;
+      cursor: help;
+      transition: color .15s ease, border-color .15s ease;
     }
+    .peek:hover, .peek:focus-visible { color: var(--accent); border-color: currentColor; }
 
-    /* Grid section for links & footnotes */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: var(--spacing);
+    #swarm-peek {
+      position: fixed;
+      z-index: 60;
+      width: 300px;
+      max-width: calc(100vw - 2rem);
+      padding: .5rem;
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(4px);
+      transition: opacity .18s ease, transform .18s ease, visibility .18s;
     }
+    #swarm-peek.on { opacity: 1; visibility: visible; transform: none; }
 
-    footer {
-      text-align: center;
-      font-size: .875rem;
-      opacity: .75;
-      margin-block: var(--spacing) calc(var(--spacing) * 2);
+    /* Crops the "Swarm at t = …" banner. The source is 500x540 and the banner
+       occupies exactly rows 0-40 in every frame, so the plot is 500x499 and the
+       offset is 41/500 = 8.2% of the box width; 8.4% adds a sub-pixel safety
+       margin so no white line survives rounding. Margin percentages resolve
+       against the container width, keeping the crop exact at any rendered size. */
+    .peek-crop {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 500 / 499;
+      border-radius: calc(var(--radius) - 2px);
+      background: url("swarm-poster.jpg") center / cover no-repeat var(--surface);
     }
-    /* ===== Outdoor Gallery ===== */
-    .outdoor-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: var(--spacing);
-    }
-
-    .outdoor-grid img {
+    .peek-crop video {
+      display: block;
       width: 100%;
       height: auto;
-      border-radius: 0.5rem;
-      object-fit: cover;
+      margin-top: -8.4%;
     }
 
-    /* Hover zoom effect */
-    .outdoor-grid img:hover {
+    #swarm-peek figcaption {
+      font-size: .75rem;
+      line-height: 1.4;
+      color: var(--muted);
+      padding: .45rem .2rem .1rem;
+    }
+
+    /* ===== Gallery ===== */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: .75rem;
+      margin-top: 1.25rem;
+    }
+
+    .gallery img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: var(--radius);
+      cursor: zoom-in;
+      transition: opacity .2s ease;
+      background: var(--surface);
+    }
+    .gallery img:hover { opacity: .85; }
+
+    /* Lightbox */
+    #lightbox {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      max-width: 90vw;
-      max-height: 90vh;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      border-radius: 0.75rem;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
-      z-index: 1000;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 2rem;
+      background: rgba(0, 0, 0, .88);
       cursor: zoom-out;
     }
+    #lightbox.on { display: flex; }
 
-    footer {
-      text-align: center;
-      font-size: .875rem;
-      opacity: .75;
-      margin-block: var(--spacing) calc(var(--spacing) * 2);
+    /* Sized against the viewport, not the container: percentage max-* on a
+       flex/grid item can resolve against an intrinsically-sized track and let
+       a huge photo render at natural size. */
+    #lightbox img {
+      max-width: calc(100vw - 4rem);
+      max-height: calc(100vh - 4rem);
+      width: auto;
+      height: auto;
+      border-radius: var(--radius);
     }
 
-    /* ===== Responsive tweaks ===== */
-    @media (max-width: 640px) {
-      header.wrapper {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
+    body.lightbox-open { overflow: hidden; }
 
-      .portrait {
-        order: -1;
+    /* ===== Footer ===== */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding-block: var(--space) calc(var(--space) * 2);
+      font-size: .82rem;
+      color: var(--muted);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 680px) {
+      header.intro {
+        grid-template-columns: 1fr;
+        gap: var(--space);
       }
+      .portrait { max-width: 160px; }
+      .news-list li { grid-template-columns: 1fr; }
+      nav.top ul { gap: 1rem; font-size: .74rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
     }
   </style>
 </head>
+
 <body>
-  <header class="wrapper">
-    <div class="intro">
-      <h1>Daniel Jarne Ornia</h1>
-      <p>
-        I am a researcher in AI safety, decision making and multi‑agent AI systems at the University of Oxford. My research is funded by UK AISI's <a href="https://alignmentproject.aisi.gov.uk">Alignment Project</a>, as part of an effort to develop Bounded Multi-Agent Systems (see <a href="https://www.adaptiveagents.org/bmas">position</a>); general, safe AI through composition of bounded agents. 
-      </p>
-      <p>
-        Personally, I spend most of my free time surfing, snowboarding or climbing, I enjoy playing
-        <a href="https://soundcloud.com/djarjar">music</a> and I speak a bunch of languages<sup>1</sup>.
-      </p>
-    </div>
-
-    <figure class="portrait">
-      <img src="djarne.jpg" alt="Portrait of Daniel Jarne Ornia" loading="lazy" width="300">
-    </figure>
-  </header>
-
-  <main class="wrapper">
-    <section id="research">
-      <h2>Research Bio</h2>
-      <p>
-        I completed my PhD in Delft under the supervision of
-        <a href="https://mmazojr.3me.tudelft.nl">Dr&nbsp;Manuel&nbsp;Mazo</a> in 2023. During these years I spent the summer of 2022 at the University of Oxford, working with <a href="https://www.cs.ox.ac.uk/people/alessandro.abate/home.html">Prof.&nbsp;Alessandro&nbsp;Abate</a> on robust reinforcement learning problems. 
-        My research has ranged from mean‑field approximations for biologically inspired agents (<a href="https://ieeexplore.ieee.org/abstract/document/9729570">paper</a>) to communication‑induced uncertainty in multi‑agent systems (<a href="https://link.springer.com/chapter/10.1007/978-3-031-15839-1_16">paper</a>) and verifiable robustness in RL (<a href="https://arxiv.org/abs/2209.15320">paper</a>). 
-        After that, I was a PostDoc Researcher at the University of Oxford, under the supervision of <a href="https://www.cs.ox.ac.uk/people/michael.wooldridge/">Michael Wooldridge</a>, Ani Calinescu and Doyne Farmer, where I worked on risk awareness and information theoretic decision making in AI agents, and a senior research scientist at <a href="https://www.phaidra.ai">Phaidra</a> working on world models, RL and objective mismatch.
-      </p>
-    </section>
-
-    <section id="news">
-      <h2>News</h2>
-      <ul class="news-list">
-        <li><time datetime="2026-05">May&nbsp;2026</time> - Our proposal (co-led with Nick Bishop, David Hyland, Joel Dyer and Michael Wooldridge) has been awarded a UK AISI Alignment Fund grant! We will be working on how to develop bounded intelligence that composes into safe and general multi-agent AI systems.
-        <li><time datetime="2026-04">April&nbsp;2026</time> - Our paper (led by Alvaro Serra) on better priors for model-based RL has been accepted at ICML 2026! Find the preprint <a href="https://arxiv.org/pdf/2510.04280">here</a>.</li>
-        <li><time datetime="2025-09">September&nbsp;2025</time> - Our paper on emerging risk awareness and alignment shifts for agents under resource pressure has been accepted at NeurIPS 2025! Find the preprint <a href="https://arxiv.org/abs/2505.23436">here</a>.</li>
-        <li><time datetime="2025-09">September&nbsp;2025</time> - We got two papers accepted at the Reliable ML from Unreliable Data workshop in NeurIPS 2025; <i>Bayesian Decision Making Observing an Expert</i> and <i>Sandbagging in a Simple Survival Bandit Problem</i> (led by Joel Dyer). </li>
-        <li><time datetime="2025-05">May&nbsp;2025</time> - Our paper (co-led with Joel Dyer and Nick Bishop) on learning uninformed priors for simulation models has been accepted at ICML 2025!</li>
-        <li><time datetime="2025-05">May&nbsp;2025</time> - Our paper (co-led with Giannis Delimpaltadakis) on predictability in RL agents has been accepted at TMLR!</li>
-        <li><time datetime="2025-02">February&nbsp;2025</time> - Our <a href="https://arxiv.org/abs/2411.06223">paper</a> (led by Roman Chiva Gil) on implicit cooperation of multi-agent planning agents via predictability awareness has been accepted at AAMAS 2025!</li>
-        <li><time datetime="2024-09">September&nbsp;2024</time> - Our <a href="https://openreview.net/forum?id=dPszKqLJGk">paper</a> (co-led with Joel Dyer and Nick Bishop) on model exploration via entropy maximisation of marginal likelihood functions has been accepted at the NeurIPS 2024 Workshop on Data-driven and Differentiable Simulations, Surrogates, and Solvers!</li>
-        <li><time datetime="2024-03">March&nbsp;2024</time> — I joined the University of Oxford as a postdoc researcher, working with Prof.&nbsp;<a href="https://www.cs.ox.ac.uk/people/michael.wooldridge/">Michael&nbsp;Wooldridge</a>, <a href="https://www.cs.ox.ac.uk/people/ani.calinescu/">Ani&nbsp;Calinescu</a> and <a href="http://www.doynefarmer.com/about-me">Doyne&nbsp;Farmer</a> on ML for ABMs.</li>
-        <li><time datetime="2024-03">March&nbsp;2024</time> — Our paper on lexicographic robustness in RL was selected for oral presentation at L4DC&nbsp;2024.</li>
-        <li><time datetime="2023-04">April&nbsp;2023</time> — I started a PostDoc position at the Cognitive Robotics department in TU&nbsp;Delft, working in the <a href="https://www.autonomousrobots.nl">Autonomous Robots Lab</a> with Dr.&nbsp;Javier&nbsp;Alonso&nbsp;Mora and Dr.&nbsp;Jens&nbsp;Kober on risk‑aware decision making for autonomous navigation problems.</li>
-        <li><time datetime="2023-03">March&nbsp;2023</time> — Finished my PhD Thesis! You can find it <a href="https://repository.tudelft.nl/islandora/object/uuid:97127a09-d53b-4969-a1e0-ae09b5e92a68">here</a>.</li>
+  <nav class="top">
+    <div class="wrapper">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
-    </section>
+    </div>
+  </nav>
 
-    <section id="links-contact" class="grid">
+  <div class="wrapper">
+
+    <header class="intro" id="about">
       <div>
+        <h1>Daniel Jarne Ornia</h1>
+        <p class="role">AI Safety &middot; Decision Making &middot; Multi-Agent Systems &middot; University of Oxford</p>
+        <p>
+          I am a researcher in AI safety, decision making and multi-agent AI systems at the University of Oxford.
+          My research is funded by UK AISI's <a href="https://alignmentproject.aisi.gov.uk">Alignment Project</a>,
+          as part of an effort to develop Bounded Multi-Agent Systems (see <a href="https://www.adaptiveagents.org/bmas">position</a>):
+          general, safe AI through composition of bounded agents.
+        </p>
+        <p>
+          Personally, I spend most of my free time surfing, snowboarding or climbing, I enjoy playing
+          <a href="https://soundcloud.com/djarjar">music</a> and I speak a bunch of languages<sup>1</sup>.
+        </p>
+      </div>
+
+      <figure class="portrait">
+        <img src="djarne.jpg" alt="Portrait of Daniel Jarne Ornia" width="220" height="220" loading="eager" decoding="async">
+      </figure>
+    </header>
+
+    <main>
+      <section id="research">
+        <h2>Research Bio</h2>
+        <p>
+          I completed my PhD in Delft under the supervision of
+          <a href="https://mmazojr.3me.tudelft.nl">Manuel&nbsp;Mazo</a> in 2023, where I worked on formal methods for emergence in
+          <button type="button" class="peek" aria-describedby="swarm-peek">artificial&nbsp;swarms</button>.
+          During these years I spent the
+          summer of 2022 at the University of Oxford, working with
+          <a href="https://www.cs.ox.ac.uk/people/alessandro.abate/home.html">Alessandro&nbsp;Abate</a> on
+          robust reinforcement learning problems. My research has ranged from mean-field approximations for
+          biologically inspired agents (<a href="https://ieeexplore.ieee.org/abstract/document/9729570">paper</a>)
+          to communication-induced uncertainty in multi-agent systems
+          (<a href="https://link.springer.com/chapter/10.1007/978-3-031-15839-1_16">paper</a>) and verifiable
+          robustness in RL (<a href="https://arxiv.org/abs/2209.15320">paper</a>).
+        </p>
+        <p>
+          After that, I was a postdoctoral researcher at the University of Oxford under the supervision of
+          <a href="https://www.cs.ox.ac.uk/people/michael.wooldridge/">Michael&nbsp;Wooldridge</a>,
+          <a href="https://www.cs.ox.ac.uk/people/ani.calinescu/">Ani&nbsp;Calinescu</a> and
+          <a href="http://www.doynefarmer.com/about-me">Doyne&nbsp;Farmer</a>, where I worked on risk awareness and
+          information-theoretic decision making in AI agents, and a senior research scientist at
+          <a href="https://www.phaidra.ai">Phaidra</a> working on world models, RL and objective mismatch.
+        </p>
+      </section>
+
+      <section id="publications">
+        <h2>Selected Publications</h2>
+
+        <ol class="pubs">
+          <li>
+            <span class="venue">NeurIPS 2025</span>
+            <h3 class="pub-title">
+              <a href="https://arxiv.org/abs/2505.23436">Emergent Risk Awareness in Rational Agents under Resource Constraints</a>
+            </h3>
+            <p class="authors">
+              <strong>Daniel Jarne Ornia</strong>, Nicholas Bishop, Joel Dyer, Wei-Chen Lee, Ani Calinescu,
+              Doyne Farmer, Michael Wooldridge
+            </p>
+            <details>
+              <summary>Abstract</summary>
+              <p class="abstract">
+                Advanced reasoning models with agentic capabilities (AI agents) are deployed to interact with humans
+                and to solve sequential decision-making problems under (often approximate) utility functions and
+                internal models. When such problems have resource or failure constraints where action sequences may
+                be forcibly terminated once resources are exhausted, agents face implicit trade-offs that reshape
+                their utility-driven (rational) behaviour. Additionally, since these agents are typically commissioned
+                by a human principal to act on their behalf, asymmetries in constraint exposure can give rise to
+                previously unanticipated misalignment between human objectives and agent incentives. We formalise this
+                setting through a survival bandit framework, provide theoretical and empirical results that quantify
+                the impact of survival-driven preference shifts, identify conditions under which misalignment emerges
+                and propose mechanisms to mitigate the emergence of risk-seeking or risk-averse behaviours. As a
+                result, this work aims to increase understanding and interpretability of emergent behaviours of AI
+                agents operating under such survival pressure, and offer guidelines for safely deploying such AI
+                systems in critical resource-limited environments.
+              </p>
+            </details>
+          </li>
+
+          <li>
+            <span class="venue">Position paper &middot; 2026</span>
+            <h3 class="pub-title">
+              <a href="https://www.adaptiveagents.org/bmas">Safe AI Should be Bounded and Multi-Agent</a>
+            </h3>
+            <p class="authors">
+              David Hyland, <strong>Daniel Jarne Ornia</strong>, Nicholas Bishop, Joel Dyer, Olivia Macmillan-Scott,
+              Tom&aacute;&scaron; Gaven&#269;iak, Anisoara Calinescu, Michael J. Wooldridge, Fernando E. Rosas,
+              Pedro A. Ortega
+            </p>
+            <details>
+              <summary>Abstract</summary>
+              <p class="abstract">
+                Major developments in frontier AI systems over the last decade have been driven by the scaling
+                paradigm, which treats resource constraints as key obstacles to be overcome in the pursuit of more
+                capable systems. Here, we argue for a complementary paradigm that embraces these constraints—together
+                with the multi-agent, distributed nature of real-world deployments—as a route towards safe and
+                scalable AI. Rather than scaling individual agents alone, we posit that legibly composing agents while
+                deliberately bounding their capabilities, affordances, and resource budgets can reliably yield
+                system-level competence. We call such systems bounded multi-agent systems (BMAS). Our position is that
+                bounded agency should be a foundational principle for scaling towards safe, robust, and equitable AI.
+                This motivates a research agenda to formally characterise bounded agency, design legible interfaces
+                and institutions for agent ecosystems, and evaluate when bounded modular systems are more appropriate
+                than monolithic systems.
+              </p>
+            </details>
+          </li>
+
+          <li>
+            <span class="venue">NeurIPS 2025 Workshop</span>
+            <h3 class="pub-title">
+              <a href="https://arxiv.org/abs/2510.08113">Bayesian Decision Making around Experts</a>
+            </h3>
+            <p class="authors">
+              <strong>Daniel Jarne Ornia</strong>, Joel Dyer, Nicholas George Bishop, Anisoara Calinescu,
+              Michael J. Wooldridge
+            </p>
+            <details>
+              <summary>Abstract</summary>
+              <p class="abstract">
+                Complex learning agents are increasingly deployed alongside existing experts, such as human operators
+                or previously trained agents. However, it remains unclear how a learner should optimally incorporate
+                certain forms of expert data, which may differ in structure from the learner's own action-outcome
+                experiences. We study this problem in the context of Bayesian multi-armed bandits, considering:
+                (i) offline settings, where the learner receives a dataset of outcomes from the expert's optimal
+                policy before interaction, and (ii) simultaneous settings, where the learner must choose at each step
+                whether to update its beliefs based on its own experience, or based on the outcome simultaneously
+                achieved by an expert. We formalize how expert data influences the learner's posterior, and prove that
+                pretraining on expert outcomes tightens information-theoretic regret bounds by the mutual information
+                between the expert data and the optimal action. For the simultaneous setting, we propose an
+                information-directed rule where the learner processes the data source that maximizes their one-step
+                information gain about the optimal action. Finally, we propose strategies for how the learner can
+                infer when to trust the expert and when not to, safeguarding the learner for the cases where the
+                expert is ineffective or compromised. By quantifying the value of expert data, our framework provides
+                practical, information-theoretic algorithms for agents to intelligently decide when to learn from
+                others.
+              </p>
+            </details>
+          </li>
+
+          <li>
+            <span class="venue">TMLR 2025</span>
+            <h3 class="pub-title">
+              <a href="https://arxiv.org/abs/2311.18703">Predictable Reinforcement Learning Dynamics through Entropy Rate Minimization</a>
+            </h3>
+            <p class="authors">
+              <strong>Daniel Jarne Ornia</strong>, Giannis Delimpaltadakis, Jens Kober, Javier Alonso-Mora
+            </p>
+            <details>
+              <summary>Abstract</summary>
+              <p class="abstract">
+                In Reinforcement Learning (RL), agents have no incentive to exhibit predictable behaviours, and are
+                often pushed (through e.g. policy entropy regularisation) to randomise their actions in favour of
+                exploration. This often makes it challenging for other agents and humans to predict an agent's
+                behaviour, triggering unsafe scenarios (e.g. in human-robot interaction). We propose a novel method to
+                induce predictable behaviour in RL agents, termed Predictability-Aware RL (PARL), employing the
+                agent's trajectory entropy rate to quantify predictability. Our method maximizes a linear combination
+                of a standard discounted reward and the negative entropy rate, thus trading off optimality with
+                predictability. We show how the entropy rate can be formally cast as an average reward, how
+                entropy-rate value functions can be estimated from a learned model and incorporate this in
+                policy-gradient algorithms, and demonstrate how this approach produces predictable (near-optimal)
+                policies in tasks inspired by human-robot use-cases.
+              </p>
+            </details>
+          </li>
+        </ol>
+
+        <p class="note" style="margin-top:1.5rem">
+          Full list on <a href="https://scholar.google.com/citations?user=kZjf_P4AAAAJ">Google&nbsp;Scholar</a>.
+        </p>
+      </section>
+
+      <section id="news">
+        <h2>News</h2>
+
+        <ul class="news-list">
+          <li>
+            <time datetime="2026-05">May&nbsp;2026</time>
+            <span>Our proposal (co-led with Nick Bishop, David Hyland, Joel Dyer and Michael Wooldridge) has been
+              awarded a UK AISI Alignment Fund grant. We will be working on how to develop bounded intelligence that
+              composes into safe and general multi-agent AI systems.</span>
+          </li>
+          <li>
+            <time datetime="2026-04">April&nbsp;2026</time>
+            <span>Our paper (led by Alvaro Serra) on better priors for model-based RL has been accepted at ICML 2026.
+              Preprint <a href="https://arxiv.org/pdf/2510.04280">here</a>.</span>
+          </li>
+          <li>
+            <time datetime="2025-09">September&nbsp;2025</time>
+            <span>Our paper on emerging risk awareness and alignment shifts for agents under resource pressure has
+              been accepted at NeurIPS 2025. Preprint <a href="https://arxiv.org/abs/2505.23436">here</a>.</span>
+          </li>
+          <li>
+            <time datetime="2025-09">September&nbsp;2025</time>
+            <span>Two papers accepted at the Reliable ML from Unreliable Data workshop at NeurIPS 2025:
+              <i>Bayesian Decision Making around Experts</i> and <i>Sandbagging in a Simple Survival Bandit
+              Problem</i> (led by Joel Dyer).</span>
+          </li>
+        </ul>
+
+        <details id="older-news">
+          <summary>Earlier news</summary>
+          <ul class="news-list">
+            <li>
+              <time datetime="2025-05">May&nbsp;2025</time>
+              <span>Our paper (co-led with Joel Dyer and Nick Bishop) on learning uninformed priors for simulation
+                models has been accepted at ICML 2025.</span>
+            </li>
+            <li>
+              <time datetime="2025-05">May&nbsp;2025</time>
+              <span>Our paper (co-led with Giannis Delimpaltadakis) on predictability in RL agents has been accepted
+                at TMLR.</span>
+            </li>
+            <li>
+              <time datetime="2025-02">February&nbsp;2025</time>
+              <span>Our <a href="https://arxiv.org/abs/2411.06223">paper</a> (led by Roman Chiva Gil) on implicit
+                cooperation of multi-agent planning agents via predictability awareness has been accepted at
+                AAMAS 2025.</span>
+            </li>
+            <li>
+              <time datetime="2024-09">September&nbsp;2024</time>
+              <span>Our <a href="https://openreview.net/forum?id=dPszKqLJGk">paper</a> (co-led with Joel Dyer and Nick
+                Bishop) on model exploration via entropy maximisation of marginal likelihood functions has been
+                accepted at the NeurIPS 2024 Workshop on Data-driven and Differentiable Simulations, Surrogates,
+                and Solvers.</span>
+            </li>
+            <li>
+              <time datetime="2024-03">March&nbsp;2024</time>
+              <span>I joined the University of Oxford as a postdoctoral researcher, working with
+                Prof.&nbsp;<a href="https://www.cs.ox.ac.uk/people/michael.wooldridge/">Michael&nbsp;Wooldridge</a>,
+                <a href="https://www.cs.ox.ac.uk/people/ani.calinescu/">Ani&nbsp;Calinescu</a> and
+                <a href="http://www.doynefarmer.com/about-me">Doyne&nbsp;Farmer</a> on ML for ABMs.</span>
+            </li>
+            <li>
+              <time datetime="2024-03">March&nbsp;2024</time>
+              <span>Our paper on lexicographic robustness in RL was selected for oral presentation at
+                L4DC&nbsp;2024.</span>
+            </li>
+            <li>
+              <time datetime="2023-04">April&nbsp;2023</time>
+              <span>I started a postdoc position at the Cognitive Robotics department in TU&nbsp;Delft, working in the
+                <a href="https://www.autonomousrobots.nl">Autonomous Robots Lab</a> with Dr.&nbsp;Javier&nbsp;Alonso&nbsp;Mora
+                and Dr.&nbsp;Jens&nbsp;Kober on risk-aware decision making for autonomous navigation problems.</span>
+            </li>
+            <li>
+              <time datetime="2023-03">March&nbsp;2023</time>
+              <span>Finished my PhD thesis. You can find it
+                <a href="https://repository.tudelft.nl/islandora/object/uuid:97127a09-d53b-4969-a1e0-ae09b5e92a68">here</a>.</span>
+            </li>
+          </ul>
+        </details>
+      </section>
+
+      <section id="contact">
         <h2>Links &amp; Contact</h2>
         <ul class="contact-list">
-          <li><a href="https://scholar.google.com/citations?user=kZjf_P4AAAAJ">Google&nbsp;Scholar</a></li>
           <li><a href="mailto:daniel.jarne@gmail.com">Email</a></li>
+          <li><a href="https://scholar.google.com/citations?user=kZjf_P4AAAAJ">Google&nbsp;Scholar</a></li>
           <li><a href="https://github.com/danieljarne">GitHub</a></li>
           <li><a href="https://www.linkedin.com/in/djarneornia/">LinkedIn</a></li>
         </ul>
-      </div>
-      <div>
-        <h2>Footnotes</h2>
-        <p><sup>1</sup> Spanish, Catalan, English, French, Dutch</p>
-      </div>
-    </section>
+      </section>
 
-    <!-- ===== Outdoor Stuff Section ===== -->
-    <section id="outdoor">
-      <h2>Outdoor Stuff</h2>
-      <div class="outdoor-grid">
-        <img src="20210802_160803_Original.jpg" alt="Outdoor photo 1" loading="lazy">
-        <img src="20210804_190714_Original.jpg" alt="Outdoor photo 2" loading="lazy">
-        <img src="2DB860AA-707D-4D5F-B8B2-CCBB4A67AA17.JPG" alt="Outdoor photo 3" loading="lazy">
-        <img src="Hoddevik%20-%20hurk.JPG" alt="Outdoor photo 4" loading="lazy">
-        <img src="IMG_8257.jpg" alt="Outdoor photo 5" loading="lazy">
-        <img src="RCroy-1273.jpeg" alt="Outdoor photo 6" loading="lazy">
-      </div>
-    </section>
-  </main>
+      <section id="outdoor">
+        <h2>Outdoor</h2>
+        <details>
+          <summary>Photos</summary>
+          <div class="gallery">
+            <img src="20210802_160803_Original.jpg" alt="Outdoor photo" loading="lazy" decoding="async">
+            <img src="20210804_190714_Original.jpg" alt="Outdoor photo" loading="lazy" decoding="async">
+            <img src="2DB860AA-707D-4D5F-B8B2-CCBB4A67AA17.JPG" alt="Outdoor photo" loading="lazy" decoding="async">
+            <img src="Hoddevik%20-%20hurk.JPG" alt="Surfing in Hoddevik" loading="lazy" decoding="async">
+            <img src="IMG_8257.jpg" alt="Outdoor photo" loading="lazy" decoding="async">
+            <img src="RCroy-1273.jpeg" alt="Outdoor photo" loading="lazy" decoding="async">
+          </div>
+        </details>
+      </section>
+    </main>
 
-  <footer class="wrapper">
-    <small>&copy; <span id="year"></span> Daniel Jarne Ornia</small>
-  </footer>
+    <footer>
+      <p class="note" style="margin:0 0 .5rem"><sup>1</sup> Spanish, Catalan, English, French, Dutch.</p>
+      <small>&copy; <span id="year"></span> Daniel Jarne Ornia</small>
+    </footer>
+  </div>
+
+  <figure id="swarm-peek" role="tooltip">
+    <div class="peek-crop">
+      <video src="swarm.mp4" muted loop playsinline preload="none"
+             aria-label="Simulation of 600 agents self-organising around a goal"></video>
+    </div>
+    <figcaption>600 agents self-organising around a goal &mdash; from my PhD work on emergence in swarms.</figcaption>
+  </figure>
+
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged photo"><img alt=""></div>
 
   <script>
-    // Update copyright year automatically
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Click-to-zoom for the gallery
+    const box = document.getElementById('lightbox');
+    const boxImg = box.querySelector('img');
+
+    document.querySelectorAll('.gallery img').forEach(img => {
+      img.addEventListener('click', () => {
+        boxImg.src = img.currentSrc || img.src;
+        boxImg.alt = img.alt;
+        box.classList.add('on');
+        document.body.classList.add('lightbox-open');
+      });
+    });
+
+    const close = () => {
+      box.classList.remove('on');
+      document.body.classList.remove('lightbox-open');
+      boxImg.removeAttribute('src');
+    };
+
+    // Swarm peek: hover or focus on desktop, tap to pin on touch.
+    const term = document.querySelector('.peek');
+    const peek = document.getElementById('swarm-peek');
+    const vid = peek.querySelector('video');
+    const stillOnly = matchMedia('(prefers-reduced-motion: reduce)');
+    let pinned = false;
+
+    const place = () => {
+      const t = term.getBoundingClientRect();
+      const w = peek.offsetWidth, h = peek.offsetHeight, m = 8;
+      // Prefer above the term; drop below if there isn't room. Clamp on both
+      // axes so the card stays on screen even if the anchor scrolls out of view.
+      const top = t.top - h - m >= m ? t.top - h - m : t.bottom + m;
+      const clamp = (v, max) => Math.min(Math.max(m, v), Math.max(m, max));
+      peek.style.top = clamp(top, innerHeight - h - m) + 'px';
+      peek.style.left = clamp(t.left + t.width / 2 - w / 2, innerWidth - w - m) + 'px';
+    };
+
+    const showPeek = () => {
+      place();
+      peek.classList.add('on');
+      if (!stillOnly.matches) vid.play().catch(() => {});
+    };
+
+    const hidePeek = () => {
+      if (pinned) return;
+      peek.classList.remove('on');
+      vid.pause();
+    };
+
+    term.addEventListener('mouseenter', showPeek);
+    term.addEventListener('focus', showPeek);
+    term.addEventListener('mouseleave', hidePeek);
+    term.addEventListener('blur', () => { pinned = false; hidePeek(); });
+
+    term.addEventListener('click', () => {
+      pinned = !pinned;
+      pinned ? showPeek() : (peek.classList.remove('on'), vid.pause());
+    });
+
+    peek.addEventListener('mouseenter', () => peek.classList.add('on'));
+    peek.addEventListener('mouseleave', hidePeek);
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { pinned = false; hidePeek(); }
+    });
+
+    addEventListener('scroll', () => { if (peek.classList.contains('on')) place(); }, { passive: true });
+    addEventListener('resize', () => { if (peek.classList.contains('on')) place(); });
+    box.addEventListener('click', close);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
   </script>
 </body>
 </html>
