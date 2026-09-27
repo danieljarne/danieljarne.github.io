@@ -470,6 +470,37 @@
         <h2>Selected Publications</h2>
 
         <ol class="pubs">
+            <li>
+            <span class="venue">NeurIPS 2026</span>
+            <h3 class="pub-title">
+              <a href="https://arxiv.org/abs/2510.08113">Bayesian Decision Making around Experts</a>
+            </h3>
+            <p class="authors">
+              <strong>Daniel Jarne Ornia</strong>, Joel Dyer, Nicholas George Bishop, Anisoara Calinescu,
+              Michael J. Wooldridge
+            </p>
+            <details>
+              <summary>Abstract</summary>
+              <p class="abstract">
+                Complex learning agents are increasingly deployed alongside existing experts, such as human operators
+                or previously trained agents. However, it remains unclear how a learner should optimally incorporate
+                certain forms of expert data, which may differ in structure from the learner's own action-outcome
+                experiences. We study this problem in the context of Bayesian multi-armed bandits, considering:
+                (i) offline settings, where the learner receives a dataset of outcomes from the expert's optimal
+                policy before interaction, and (ii) simultaneous settings, where the learner must choose at each step
+                whether to update its beliefs based on its own experience, or based on the outcome simultaneously
+                achieved by an expert. We formalize how expert data influences the learner's posterior, and prove that
+                pretraining on expert outcomes tightens information-theoretic regret bounds by the mutual information
+                between the expert data and the optimal action. For the simultaneous setting, we propose an
+                information-directed rule where the learner processes the data source that maximizes their one-step
+                information gain about the optimal action. Finally, we propose strategies for how the learner can
+                infer when to trust the expert and when not to, safeguarding the learner for the cases where the
+                expert is ineffective or compromised. By quantifying the value of expert data, our framework provides
+                practical, information-theoretic algorithms for agents to intelligently decide when to learn from
+                others.
+              </p>
+            </details>
+          </li>
           <li>
             <span class="venue">NeurIPS 2025</span>
             <h3 class="pub-title">
@@ -523,38 +554,6 @@
                 This motivates a research agenda to formally characterise bounded agency, design legible interfaces
                 and institutions for agent ecosystems, and evaluate when bounded modular systems are more appropriate
                 than monolithic systems.
-              </p>
-            </details>
-          </li>
-
-          <li>
-            <span class="venue">NeurIPS 2025 Workshop</span>
-            <h3 class="pub-title">
-              <a href="https://arxiv.org/abs/2510.08113">Bayesian Decision Making around Experts</a>
-            </h3>
-            <p class="authors">
-              <strong>Daniel Jarne Ornia</strong>, Joel Dyer, Nicholas George Bishop, Anisoara Calinescu,
-              Michael J. Wooldridge
-            </p>
-            <details>
-              <summary>Abstract</summary>
-              <p class="abstract">
-                Complex learning agents are increasingly deployed alongside existing experts, such as human operators
-                or previously trained agents. However, it remains unclear how a learner should optimally incorporate
-                certain forms of expert data, which may differ in structure from the learner's own action-outcome
-                experiences. We study this problem in the context of Bayesian multi-armed bandits, considering:
-                (i) offline settings, where the learner receives a dataset of outcomes from the expert's optimal
-                policy before interaction, and (ii) simultaneous settings, where the learner must choose at each step
-                whether to update its beliefs based on its own experience, or based on the outcome simultaneously
-                achieved by an expert. We formalize how expert data influences the learner's posterior, and prove that
-                pretraining on expert outcomes tightens information-theoretic regret bounds by the mutual information
-                between the expert data and the optimal action. For the simultaneous setting, we propose an
-                information-directed rule where the learner processes the data source that maximizes their one-step
-                information gain about the optimal action. Finally, we propose strategies for how the learner can
-                infer when to trust the expert and when not to, safeguarding the learner for the cases where the
-                expert is ineffective or compromised. By quantifying the value of expert data, our framework provides
-                practical, information-theoretic algorithms for agents to intelligently decide when to learn from
-                others.
               </p>
             </details>
           </li>
